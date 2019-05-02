@@ -1,0 +1,646 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CC5C176B492E2A178E1E1C74 /* libPods-SDWebImageMAGPlugin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C4029C6E28359641CADDB41 /* libPods-SDWebImageMAGPlugin.a */; };
+		F885FD35227B43D100E9B9EE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F885FD34227B43D100E9B9EE /* AppDelegate.m */; };
+		F885FD3D227B43D400E9B9EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F885FD3C227B43D400E9B9EE /* Assets.xcassets */; };
+		F885FD40227B43D400E9B9EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F885FD3E227B43D400E9B9EE /* LaunchScreen.storyboard */; };
+		F885FD43227B43D400E9B9EE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F885FD42227B43D400E9B9EE /* main.m */; };
+		F885FD4D227B43D400E9B9EE /* SDWebImageMAGPluginTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F885FD4C227B43D400E9B9EE /* SDWebImageMAGPluginTests.m */; };
+		F885FD58227B43D400E9B9EE /* SDWebImageMAGPluginUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F885FD57227B43D400E9B9EE /* SDWebImageMAGPluginUITests.m */; };
+		F885FD6B227B440700E9B9EE /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F885FD66227B440600E9B9EE /* TestViewController.m */; };
+		F885FD6C227B440700E9B9EE /* UIImageView+MAGWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F885FD69227B440600E9B9EE /* UIImageView+MAGWebCache.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F885FD49227B43D400E9B9EE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F885FD28227B43D100E9B9EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F885FD2F227B43D100E9B9EE;
+			remoteInfo = SDWebImageMAGPlugin;
+		};
+		F885FD54227B43D400E9B9EE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F885FD28227B43D100E9B9EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F885FD2F227B43D100E9B9EE;
+			remoteInfo = SDWebImageMAGPlugin;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1C4029C6E28359641CADDB41 /* libPods-SDWebImageMAGPlugin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SDWebImageMAGPlugin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6280B0A7FB39344CD90F87FA /* Pods-SDWebImageMAGPlugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImageMAGPlugin.debug.xcconfig"; path = "Target Support Files/Pods-SDWebImageMAGPlugin/Pods-SDWebImageMAGPlugin.debug.xcconfig"; sourceTree = "<group>"; };
+		E4FB39D5C8907AF3D6384027 /* Pods-SDWebImageMAGPlugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImageMAGPlugin.release.xcconfig"; path = "Target Support Files/Pods-SDWebImageMAGPlugin/Pods-SDWebImageMAGPlugin.release.xcconfig"; sourceTree = "<group>"; };
+		F885FD30227B43D100E9B9EE /* SDWebImageMAGPlugin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SDWebImageMAGPlugin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F885FD33227B43D100E9B9EE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		F885FD34227B43D100E9B9EE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		F885FD3C227B43D400E9B9EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F885FD3F227B43D400E9B9EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F885FD41227B43D400E9B9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F885FD42227B43D400E9B9EE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F885FD48227B43D400E9B9EE /* SDWebImageMAGPluginTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SDWebImageMAGPluginTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F885FD4C227B43D400E9B9EE /* SDWebImageMAGPluginTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDWebImageMAGPluginTests.m; sourceTree = "<group>"; };
+		F885FD4E227B43D400E9B9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F885FD53227B43D400E9B9EE /* SDWebImageMAGPluginUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SDWebImageMAGPluginUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F885FD57227B43D400E9B9EE /* SDWebImageMAGPluginUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDWebImageMAGPluginUITests.m; sourceTree = "<group>"; };
+		F885FD59227B43D400E9B9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F885FD66227B440600E9B9EE /* TestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestViewController.m; sourceTree = "<group>"; };
+		F885FD67227B440600E9B9EE /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
+		F885FD69227B440600E9B9EE /* UIImageView+MAGWebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+MAGWebCache.m"; sourceTree = "<group>"; };
+		F885FD6A227B440600E9B9EE /* UIImageView+MAGWebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+MAGWebCache.h"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F885FD2D227B43D100E9B9EE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC5C176B492E2A178E1E1C74 /* libPods-SDWebImageMAGPlugin.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F885FD45227B43D400E9B9EE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F885FD50227B43D400E9B9EE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1875EA0BC29964E1733EBB01 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6280B0A7FB39344CD90F87FA /* Pods-SDWebImageMAGPlugin.debug.xcconfig */,
+				E4FB39D5C8907AF3D6384027 /* Pods-SDWebImageMAGPlugin.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		D7DDB487CB4542DC8277A793 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1C4029C6E28359641CADDB41 /* libPods-SDWebImageMAGPlugin.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F885FD27227B43D100E9B9EE = {
+			isa = PBXGroup;
+			children = (
+				F885FD32227B43D100E9B9EE /* SDWebImageMAGPlugin */,
+				F885FD4B227B43D400E9B9EE /* SDWebImageMAGPluginTests */,
+				F885FD56227B43D400E9B9EE /* SDWebImageMAGPluginUITests */,
+				F885FD31227B43D100E9B9EE /* Products */,
+				1875EA0BC29964E1733EBB01 /* Pods */,
+				D7DDB487CB4542DC8277A793 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F885FD31227B43D100E9B9EE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F885FD30227B43D100E9B9EE /* SDWebImageMAGPlugin.app */,
+				F885FD48227B43D400E9B9EE /* SDWebImageMAGPluginTests.xctest */,
+				F885FD53227B43D400E9B9EE /* SDWebImageMAGPluginUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F885FD32227B43D100E9B9EE /* SDWebImageMAGPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				F885FD68227B440600E9B9EE /* Plugin */,
+				F885FD65227B440600E9B9EE /* Controller */,
+				F885FD33227B43D100E9B9EE /* AppDelegate.h */,
+				F885FD34227B43D100E9B9EE /* AppDelegate.m */,
+				F885FD3C227B43D400E9B9EE /* Assets.xcassets */,
+				F885FD3E227B43D400E9B9EE /* LaunchScreen.storyboard */,
+				F885FD41227B43D400E9B9EE /* Info.plist */,
+				F885FD42227B43D400E9B9EE /* main.m */,
+			);
+			path = SDWebImageMAGPlugin;
+			sourceTree = "<group>";
+		};
+		F885FD4B227B43D400E9B9EE /* SDWebImageMAGPluginTests */ = {
+			isa = PBXGroup;
+			children = (
+				F885FD4C227B43D400E9B9EE /* SDWebImageMAGPluginTests.m */,
+				F885FD4E227B43D400E9B9EE /* Info.plist */,
+			);
+			path = SDWebImageMAGPluginTests;
+			sourceTree = "<group>";
+		};
+		F885FD56227B43D400E9B9EE /* SDWebImageMAGPluginUITests */ = {
+			isa = PBXGroup;
+			children = (
+				F885FD57227B43D400E9B9EE /* SDWebImageMAGPluginUITests.m */,
+				F885FD59227B43D400E9B9EE /* Info.plist */,
+			);
+			path = SDWebImageMAGPluginUITests;
+			sourceTree = "<group>";
+		};
+		F885FD65227B440600E9B9EE /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F885FD67227B440600E9B9EE /* TestViewController.h */,
+				F885FD66227B440600E9B9EE /* TestViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F885FD68227B440600E9B9EE /* Plugin */ = {
+			isa = PBXGroup;
+			children = (
+				F885FD6A227B440600E9B9EE /* UIImageView+MAGWebCache.h */,
+				F885FD69227B440600E9B9EE /* UIImageView+MAGWebCache.m */,
+			);
+			path = Plugin;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F885FD2F227B43D100E9B9EE /* SDWebImageMAGPlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F885FD5C227B43D400E9B9EE /* Build configuration list for PBXNativeTarget "SDWebImageMAGPlugin" */;
+			buildPhases = (
+				6C2825DC1EBEEE00BADF4A36 /* [CP] Check Pods Manifest.lock */,
+				F885FD2C227B43D100E9B9EE /* Sources */,
+				F885FD2D227B43D100E9B9EE /* Frameworks */,
+				F885FD2E227B43D100E9B9EE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SDWebImageMAGPlugin;
+			productName = SDWebImageMAGPlugin;
+			productReference = F885FD30227B43D100E9B9EE /* SDWebImageMAGPlugin.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F885FD47227B43D400E9B9EE /* SDWebImageMAGPluginTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F885FD5F227B43D400E9B9EE /* Build configuration list for PBXNativeTarget "SDWebImageMAGPluginTests" */;
+			buildPhases = (
+				F885FD44227B43D400E9B9EE /* Sources */,
+				F885FD45227B43D400E9B9EE /* Frameworks */,
+				F885FD46227B43D400E9B9EE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F885FD4A227B43D400E9B9EE /* PBXTargetDependency */,
+			);
+			name = SDWebImageMAGPluginTests;
+			productName = SDWebImageMAGPluginTests;
+			productReference = F885FD48227B43D400E9B9EE /* SDWebImageMAGPluginTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		F885FD52227B43D400E9B9EE /* SDWebImageMAGPluginUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F885FD62227B43D400E9B9EE /* Build configuration list for PBXNativeTarget "SDWebImageMAGPluginUITests" */;
+			buildPhases = (
+				F885FD4F227B43D400E9B9EE /* Sources */,
+				F885FD50227B43D400E9B9EE /* Frameworks */,
+				F885FD51227B43D400E9B9EE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F885FD55227B43D400E9B9EE /* PBXTargetDependency */,
+			);
+			name = SDWebImageMAGPluginUITests;
+			productName = SDWebImageMAGPluginUITests;
+			productReference = F885FD53227B43D400E9B9EE /* SDWebImageMAGPluginUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F885FD28227B43D100E9B9EE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = Lyeah;
+				TargetAttributes = {
+					F885FD2F227B43D100E9B9EE = {
+						CreatedOnToolsVersion = 10.2;
+					};
+					F885FD47227B43D400E9B9EE = {
+						CreatedOnToolsVersion = 10.2;
+						TestTargetID = F885FD2F227B43D100E9B9EE;
+					};
+					F885FD52227B43D400E9B9EE = {
+						CreatedOnToolsVersion = 10.2;
+						TestTargetID = F885FD2F227B43D100E9B9EE;
+					};
+				};
+			};
+			buildConfigurationList = F885FD2B227B43D100E9B9EE /* Build configuration list for PBXProject "SDWebImageMAGPlugin" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F885FD27227B43D100E9B9EE;
+			productRefGroup = F885FD31227B43D100E9B9EE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F885FD2F227B43D100E9B9EE /* SDWebImageMAGPlugin */,
+				F885FD47227B43D400E9B9EE /* SDWebImageMAGPluginTests */,
+				F885FD52227B43D400E9B9EE /* SDWebImageMAGPluginUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F885FD2E227B43D100E9B9EE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F885FD40227B43D400E9B9EE /* LaunchScreen.storyboard in Resources */,
+				F885FD3D227B43D400E9B9EE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F885FD46227B43D400E9B9EE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F885FD51227B43D400E9B9EE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6C2825DC1EBEEE00BADF4A36 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SDWebImageMAGPlugin-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F885FD2C227B43D100E9B9EE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F885FD6B227B440700E9B9EE /* TestViewController.m in Sources */,
+				F885FD43227B43D400E9B9EE /* main.m in Sources */,
+				F885FD6C227B440700E9B9EE /* UIImageView+MAGWebCache.m in Sources */,
+				F885FD35227B43D100E9B9EE /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F885FD44227B43D400E9B9EE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F885FD4D227B43D400E9B9EE /* SDWebImageMAGPluginTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F885FD4F227B43D400E9B9EE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F885FD58227B43D400E9B9EE /* SDWebImageMAGPluginUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F885FD4A227B43D400E9B9EE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F885FD2F227B43D100E9B9EE /* SDWebImageMAGPlugin */;
+			targetProxy = F885FD49227B43D400E9B9EE /* PBXContainerItemProxy */;
+		};
+		F885FD55227B43D400E9B9EE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F885FD2F227B43D100E9B9EE /* SDWebImageMAGPlugin */;
+			targetProxy = F885FD54227B43D400E9B9EE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F885FD3E227B43D400E9B9EE /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F885FD3F227B43D400E9B9EE /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F885FD5A227B43D400E9B9EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F885FD5B227B43D400E9B9EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F885FD5D227B43D400E9B9EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6280B0A7FB39344CD90F87FA /* Pods-SDWebImageMAGPlugin.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8U2V26B5P4;
+				INFOPLIST_FILE = SDWebImageMAGPlugin/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyeah.SDWebImageMAGPlugin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F885FD5E227B43D400E9B9EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E4FB39D5C8907AF3D6384027 /* Pods-SDWebImageMAGPlugin.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8U2V26B5P4;
+				INFOPLIST_FILE = SDWebImageMAGPlugin/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyeah.SDWebImageMAGPlugin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F885FD60227B43D400E9B9EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8U2V26B5P4;
+				INFOPLIST_FILE = SDWebImageMAGPluginTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyeah.SDWebImageMAGPluginTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SDWebImageMAGPlugin.app/SDWebImageMAGPlugin";
+			};
+			name = Debug;
+		};
+		F885FD61227B43D400E9B9EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8U2V26B5P4;
+				INFOPLIST_FILE = SDWebImageMAGPluginTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyeah.SDWebImageMAGPluginTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SDWebImageMAGPlugin.app/SDWebImageMAGPlugin";
+			};
+			name = Release;
+		};
+		F885FD63227B43D400E9B9EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8U2V26B5P4;
+				INFOPLIST_FILE = SDWebImageMAGPluginUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyeah.SDWebImageMAGPluginUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SDWebImageMAGPlugin;
+			};
+			name = Debug;
+		};
+		F885FD64227B43D400E9B9EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8U2V26B5P4;
+				INFOPLIST_FILE = SDWebImageMAGPluginUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyeah.SDWebImageMAGPluginUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SDWebImageMAGPlugin;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F885FD2B227B43D100E9B9EE /* Build configuration list for PBXProject "SDWebImageMAGPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F885FD5A227B43D400E9B9EE /* Debug */,
+				F885FD5B227B43D400E9B9EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F885FD5C227B43D400E9B9EE /* Build configuration list for PBXNativeTarget "SDWebImageMAGPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F885FD5D227B43D400E9B9EE /* Debug */,
+				F885FD5E227B43D400E9B9EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F885FD5F227B43D400E9B9EE /* Build configuration list for PBXNativeTarget "SDWebImageMAGPluginTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F885FD60227B43D400E9B9EE /* Debug */,
+				F885FD61227B43D400E9B9EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F885FD62227B43D400E9B9EE /* Build configuration list for PBXNativeTarget "SDWebImageMAGPluginUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F885FD63227B43D400E9B9EE /* Debug */,
+				F885FD64227B43D400E9B9EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F885FD28227B43D100E9B9EE /* Project object */;
+}
