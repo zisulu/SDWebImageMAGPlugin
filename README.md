@@ -1,0 +1,2 @@
+# SDWebImageMAGPlugin
+SDWebImageMAGPlugin
