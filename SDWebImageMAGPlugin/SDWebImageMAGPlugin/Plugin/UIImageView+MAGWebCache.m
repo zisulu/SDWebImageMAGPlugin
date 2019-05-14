@@ -9,12 +9,12 @@
 #import "UIImageView+MAGWebCache.h"
 #import <objc/runtime.h>
 
-SDWebImageContextOption const MAGWebImageContextAnimateKey                              = @"animateEnabled";
-SDWebImageContextOption const MAGWebImageContextWatermarkKey                            = @"watermarkEnabled";
-SDWebImageContextOption const MAGWebImageContextOriginalURLKey                          = @"originalURL";
-SDWebImageContextOption const MAGWebImageContextPreferredSizeKey                        = @"preferredSize";
-SDWebImageContextOption const MAGWebImageContextGPColorIgnoredKey                       = @"globalPlaceholderColorIgnored";
-SDWebImageContextOption const MAGWebImageContextGPImageIgnoredKey                       = @"globalPlaceholderImageIgnored";
+SDWebImageContextOption const MAGWebImageContextAnimateKey                              = @"mag_animateEnabled";
+SDWebImageContextOption const MAGWebImageContextWatermarkKey                            = @"mag_watermarkEnabled";
+SDWebImageContextOption const MAGWebImageContextOriginalURLKey                          = @"mag_originalURL";
+SDWebImageContextOption const MAGWebImageContextPreferredSizeKey                        = @"mag_preferredSize";
+SDWebImageContextOption const MAGWebImageContextGPColorIgnoredKey                       = @"mag_globalPlaceholderColorIgnored";
+SDWebImageContextOption const MAGWebImageContextGPImageIgnoredKey                       = @"mag_globalPlaceholderImageIgnored";
 
 static const char MAGWebImagePreferedWidthKey                          = '\0';
 static const char MAGWebImagePreferedHieghtKey                         = '\0';
