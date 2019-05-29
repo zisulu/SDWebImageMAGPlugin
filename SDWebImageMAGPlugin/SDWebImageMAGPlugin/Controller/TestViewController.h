@@ -2,7 +2,7 @@
 //  TestViewController.h
 //  SDWebImageMAGPlugin
 //
-//  Created by appl on 2019/4/23.
+//  Created by luwenlong on 2019/4/23.
 //  Copyright © 2019 lyeah. All rights reserved.
 //
 
