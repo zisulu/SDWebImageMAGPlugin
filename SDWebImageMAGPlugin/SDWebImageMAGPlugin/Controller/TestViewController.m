@@ -63,11 +63,14 @@
     }];
     SDWebImageContext *context = @{
                                    MAGWebImageContextAnimateKey : @(YES),
-                                   MAGWebImageContextWatermarkKey : @(YES),
                                    };
-    [self.imageView2 mag_setImageWithURL:animatedWebPURL context:context completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    [self.imageView2 mag_setImageWithURL:animatedWebPURL context:context modifier:^NSURL * _Nullable(NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
+        NSString *imageUrl = originImageURL.absoluteString;
+        imageUrl = [NSString stringWithFormat:@"%@?%@", imageUrl, @"params=12345"];
+        return [NSURL URLWithString:imageUrl];
+    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         if (image) {
-            NSLog(@"%@", @"Animated WebP load success");
+            NSLog(@"%@:%@", @"Animated WebP load success", imageURL.absoluteString);
         }
     }];
 }

@@ -10,11 +10,10 @@
 #import <objc/runtime.h>
 
 SDWebImageContextOption const MAGWebImageContextAnimateKey                              = @"mag_animateEnabled";
-SDWebImageContextOption const MAGWebImageContextWatermarkKey                            = @"mag_watermarkEnabled";
 SDWebImageContextOption const MAGWebImageContextOriginalURLKey                          = @"mag_originalURL";
 SDWebImageContextOption const MAGWebImageContextPreferredSizeKey                        = @"mag_preferredSize";
-SDWebImageContextOption const MAGWebImageContextGPColorIgnoredKey                       = @"mag_globalPlaceholderColorIgnored";
-SDWebImageContextOption const MAGWebImageContextGPImageIgnoredKey                       = @"mag_globalPlaceholderImageIgnored";
+SDWebImageContextOption const MAGWebImageContextPlaceholderColorKey                     = @"mag_placeholderColor";
+SDWebImageContextOption const MAGWebImageContextPlaceholderImageKey                     = @"mag_placeholderImage";
 
 static const char MAGWebImagePreferedWidthKey                          = '\0';
 static const char MAGWebImagePreferedHieghtKey                         = '\0';
@@ -27,7 +26,7 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
 
 - (void)setMagImageURLModifierBlock:(MAGWebImageURLModifierBlock)magImageURLModifierBlock
 {
-    objc_setAssociatedObject(self, &MAGWebImageURLModifierBlockKey, magImageURLModifierBlock, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, &MAGWebImageURLModifierBlockKey, magImageURLModifierBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (MAGWebImageURLModifierBlock)magImageURLModifierBlock
@@ -37,7 +36,7 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
 
 - (void)setMagGlobalPlaceholderColor:(UIColor *)magGlobalPlaceholderColor
 {
-    objc_setAssociatedObject(self, &MAGWebImageGlobalPlaceholderColorKey, magGlobalPlaceholderColor, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, &MAGWebImageGlobalPlaceholderColorKey, magGlobalPlaceholderColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (UIColor *)magGlobalPlaceholderColor
@@ -47,7 +46,7 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
 
 - (void)setMagGlobalPlaceholderImage:(UIImage *)magGlobalPlaceholderImage
 {
-    objc_setAssociatedObject(self, &MAGWebImageGlobalPlaceholderImageKey, magGlobalPlaceholderImage, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, &MAGWebImageGlobalPlaceholderImageKey, magGlobalPlaceholderImage, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (UIImage *)magGlobalPlaceholderImage
@@ -63,7 +62,7 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
 
 - (void)setMagPreferedWidth:(CGFloat)preferedWidth
 {
-    objc_setAssociatedObject(self, &MAGWebImagePreferedWidthKey, [NSNumber numberWithFloat:preferedWidth], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, &MAGWebImagePreferedWidthKey, [NSNumber numberWithFloat:preferedWidth], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (CGFloat)magPreferedWidth
@@ -73,7 +72,7 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
 
 - (void)setMagPreferedHeight:(CGFloat)preferedHeight
 {
-    objc_setAssociatedObject(self, &MAGWebImagePreferedHieghtKey, [NSNumber numberWithFloat:preferedHeight], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, &MAGWebImagePreferedHieghtKey, [NSNumber numberWithFloat:preferedHeight], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (CGFloat)magPreferedHeight
@@ -246,21 +245,9 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
         //没设置则默认只加载第一帧
         mutableContext[MAGWebImageContextAnimateKey] = @(NO);
     }
-    if (!mutableContext[MAGWebImageContextWatermarkKey]) {
-        //没设置则默认没有水印
-        mutableContext[MAGWebImageContextWatermarkKey] = @(NO);
-    }
     if (!mutableContext[MAGWebImageContextPreferredSizeKey]) {
         //没有设置则取self.magPreferedSize
         mutableContext[MAGWebImageContextPreferredSizeKey] = [NSValue valueWithCGSize:self.magPreferedSize];
-    }
-    if (!mutableContext[MAGWebImageContextGPColorIgnoredKey]) {
-        //没设置则默认不忽略全局背景颜色
-        mutableContext[MAGWebImageContextGPColorIgnoredKey] = @(NO);
-    }
-    if (!mutableContext[MAGWebImageContextGPImageIgnoredKey]) {
-        //没设置则默认不忽略全局背景图片
-        mutableContext[MAGWebImageContextGPImageIgnoredKey] = @(NO);
     }
     //保存初始URL
     self.magOriginImageURL = url;
@@ -284,24 +271,34 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
             //不处理
         }
     }
-    BOOL globalColorIgnored = [mutableContext[MAGWebImageContextGPColorIgnoredKey] boolValue];
-    if (!globalColorIgnored) {
-        //不忽略则尝试设置全局背景颜色
-        SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
-        if (imageManager.magGlobalPlaceholderColor) {
-            self.backgroundColor = imageManager.magGlobalPlaceholderColor;
+    //设置背景颜色
+    SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
+    if (imageManager.magGlobalPlaceholderColor) {
+        self.backgroundColor = imageManager.magGlobalPlaceholderColor;
+    } else {
+        if (mutableContext[MAGWebImageContextPlaceholderColorKey]) {
+            //自定义颜色
+            self.backgroundColor = mutableContext[MAGWebImageContextPlaceholderColorKey];
+        } else {
+            //不作处理
         }
     }
-    BOOL globalImageIgnored = [mutableContext[MAGWebImageContextGPColorIgnoredKey] boolValue];
-    if (!globalImageIgnored) {
-        //不忽略则尝试设置全局背景图片
-        if (!placeholder) {
-            //没有传入缺省图片，则设置全局缺省图片
-            SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
-            if (imageManager.magGlobalPlaceholderImage) {
-                placeholder = imageManager.magGlobalPlaceholderImage;
+    //设置缺省图片
+    if (!placeholder) {
+        //没有传入缺省图片，则设置全局缺省图片
+        SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
+        if (imageManager.magGlobalPlaceholderImage) {
+            placeholder = imageManager.magGlobalPlaceholderImage;
+        } else {
+            if (mutableContext[MAGWebImageContextPlaceholderImageKey]) {
+                //自定义缺省图片
+                placeholder = mutableContext[MAGWebImageContextPlaceholderImageKey];
+            } else {
+                //不作处理
             }
         }
+    } else {
+        //直接使用placeholder
     }
     context = [mutableContext copy];
     if (modifierBlock) {

@@ -14,16 +14,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 //BOOL 动图控制参数
 FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextAnimateKey;
-//BOOL 水印控制参数
-FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextWatermarkKey;
 //NSURL 只读，不可外部设置
 FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextOriginalURLKey;
 //NSValue 传入则忽略magPreferedSize
 FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextPreferredSizeKey;
-//BOOL 传入则忽略全局缺省背景颜色
-FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextGPColorIgnoredKey;
-//BOOL 传入则忽略全局缺省背景图片
-FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextGPImageIgnoredKey;
+//UIColor 传入则忽略全局缺省背景颜色
+FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextPlaceholderColorKey;
+//UIImage 传入则忽略全局缺省背景图片
+FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextPlaceholderImageKey;
 
 typedef NSURL *_Nullable(^MAGWebImageURLModifierBlock)(NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context);
 
