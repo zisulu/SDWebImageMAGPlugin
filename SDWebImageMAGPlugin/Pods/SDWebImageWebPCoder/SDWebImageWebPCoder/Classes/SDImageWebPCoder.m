@@ -46,8 +46,8 @@
 @property (nonatomic, assign) NSUInteger offsetY; // Frame origin.y in canvas (left-bottom based)
 @property (nonatomic, assign) BOOL hasAlpha; // Whether frame contains alpha
 @property (nonatomic, assign) BOOL isFullSize; // Whether frame size is equal to canvas size
-@property (nonatomic, assign) WebPMuxAnimBlend blend; // Frame dispose method
-@property (nonatomic, assign) WebPMuxAnimDispose dispose; // Frame blend operation
+@property (nonatomic, assign) BOOL shouldBlend; // Frame dispose method
+@property (nonatomic, assign) BOOL shouldDispose; // Frame blend operation
 @property (nonatomic, assign) NSUInteger blendFromIndex; // The nearest previous frame index which blend mode is WEBP_MUX_BLEND
 
 @end
@@ -432,7 +432,11 @@
             // See #2618, the `CGColorSpaceCreateWithICCProfile` does not copy ICC Profile data, it only retain `CFDataRef`.
             // When the libwebp `WebPDemuxer` dealloc, all chunks will be freed. So we must copy the ICC data (really cheap, less than 10KB)
             NSData *profileData = [NSData dataWithBytes:chunk_iter.chunk.bytes length:chunk_iter.chunk.size];
-            colorSpaceRef = CGColorSpaceCreateWithICCProfile((__bridge CFDataRef)profileData);
+            if (@available(iOS 10, tvOS 10, macOS 10.12, watchOS 3, *)) {
+                colorSpaceRef = CGColorSpaceCreateWithICCData((__bridge CFDataRef)profileData);
+            } else {
+                colorSpaceRef = CGColorSpaceCreateWithICCProfile((__bridge CFDataRef)profileData);
+            }
             WebPDemuxReleaseChunkIterator(&chunk_iter);
             if (colorSpaceRef) {
                 // We use RGB color model to decode WebP images currently, so we must filter out other colorSpace
@@ -719,8 +723,8 @@ static void FreeImageData(void *info, const void *data, size_t size) {
         frame.width = iter.width;
         frame.height = iter.height;
         frame.hasAlpha = iter.has_alpha;
-        frame.dispose = iter.dispose_method;
-        frame.blend = iter.blend_method;
+        frame.shouldDispose = iter.dispose_method == WEBP_MUX_DISPOSE_BACKGROUND;
+        frame.shouldBlend = iter.blend_method == WEBP_MUX_BLEND;
         frame.offsetX = iter.x_offset;
         frame.offsetY = canvasHeight - iter.y_offset - iter.height;
 
@@ -728,11 +732,11 @@ static void FreeImageData(void *info, const void *data, size_t size) {
         BOOL offsetIsZero = (iter.x_offset == 0 && iter.y_offset == 0);
         frame.isFullSize = (sizeEqualsToCanvas && offsetIsZero);
         
-        if ((!frame.blend || !frame.hasAlpha) && frame.isFullSize) {
+        if ((!frame.shouldBlend || !frame.hasAlpha) && frame.isFullSize) {
             lastBlendIndex = iterIndex;
             frame.blendFromIndex = iterIndex;
         } else {
-            if (frame.dispose && frame.isFullSize) {
+            if (frame.shouldDispose && frame.isFullSize) {
                 frame.blendFromIndex = lastBlendIndex;
                 lastBlendIndex = iterIndex + 1;
             } else {
@@ -810,12 +814,10 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     // But when one frame's dispose method is `WEBP_MUX_DISPOSE_BACKGROUND`, the canvas is cleared after the frame decoded. And subsequent frames are not effected by that frame.
     // So, we calculate each frame's `blendFromIndex`. Then directly draw canvas from that index, instead of always from 0 index.
     
-    if (_currentBlendIndex + 1 == index) {
+    if (_currentBlendIndex != NSNotFound && _currentBlendIndex + 1 == index) {
         // If the request index is subsequence of current blend index, it does not matter what dispose method is. The canvas is always ready.
-        _currentBlendIndex = index;
-        NSUInteger startIndex = index;
         // libwebp's index start with 1
-        if (!WebPDemuxGetFrame(_demux, (int)(startIndex + 1), &iter)) {
+        if (!WebPDemuxGetFrame(_demux, (int)(index + 1), &iter)) {
             WebPDemuxReleaseIterator(&iter);
             return nil;
         }
@@ -824,7 +826,6 @@ static void FreeImageData(void *info, const void *data, size_t size) {
         if (_currentBlendIndex != NSNotFound) {
             CGContextClearRect(_canvas, CGRectMake(0, 0, _canvasWidth, _canvasHeight));
         }
-        _currentBlendIndex = index;
         
         // Then, loop from the blend from index, draw each of previous frames on the canvas.
         // We use do while loop to call `WebPDemuxNextFrame`(fast), until the endIndex meet.
@@ -841,9 +842,15 @@ static void FreeImageData(void *info, const void *data, size_t size) {
                 @autoreleasepool {
                     [self sd_blendWebpImageWithCanvas:_canvas iterator:iter colorSpace:_colorSpace];
                 }
-            } while ((size_t)iter.frame_num < (endIndex + 1) && WebPDemuxNextFrame(&iter));
+            } while ((size_t)iter.frame_num < endIndex && WebPDemuxNextFrame(&iter));
+        }
+        // libwebp's index start with 1
+        if (!WebPDemuxGetFrame(_demux, (int)(index + 1), &iter)) {
+            WebPDemuxReleaseIterator(&iter);
+            return nil;
         }
     }
+    _currentBlendIndex = index;
     
     // Now the canvas is ready, which respects of dispose method behavior. Just do normal decoding and produce image.
     CGImageRef imageRef = [self sd_drawnWebpImageWithCanvas:_canvas iterator:iter colorSpace:_colorSpace];
