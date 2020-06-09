@@ -62,7 +62,7 @@
             }
         });
     }];
-    [self.imageView2 sd_setImageWithURL:animatedWebPURL modifier:^NSURL * _Nullable(NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
+    [self.imageView2 sd_setImageWithURL:animatedWebPURL modifier:^NSURL * _Nullable(__kindof UIView * _Nonnull sd_view, NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
         NSString *imageUrl = originImageURL.absoluteString;
         imageUrl = [NSString stringWithFormat:@"%@?%@", imageUrl, @"params=12345"];
         return [NSURL URLWithString:imageUrl];
