@@ -9,11 +9,8 @@
 #import "UIImageView+MAGWebCache.h"
 #import <objc/runtime.h>
 
-SDWebImageContextOption const MAGWebImageContextAnimateKey                              = @"mag_animateEnabled";
-SDWebImageContextOption const MAGWebImageContextOriginalURLKey                          = @"mag_originalURL";
-SDWebImageContextOption const MAGWebImageContextPreferredSizeKey                        = @"mag_preferredSize";
-SDWebImageContextOption const MAGWebImageContextPlaceholderColorKey                     = @"mag_placeholderColor";
-SDWebImageContextOption const MAGWebImageContextPlaceholderImageKey                     = @"mag_placeholderImage";
+SDWebImageContextOption const MAGWebImageContextUseGlobalBackgroundColorKey             = @"sd_useGlobalBackgroundColor";
+SDWebImageContextOption const MAGWebImageContextUseGlobalPlaceholderImageKey            = @"sd_useGlobalPlaceholderImage";
 
 static const char MAGWebImagePreferedWidthKey                          = '\0';
 static const char MAGWebImagePreferedHieghtKey                         = '\0';
@@ -24,22 +21,22 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
 
 @implementation SDWebImageManager (MAGWebCache)
 
-- (void)setMagImageURLModifierBlock:(MAGWebImageURLModifierBlock)magImageURLModifierBlock
+- (void)setMagGlobalImageURLModifierBlock:(MAGWebImageURLModifierBlock)magGlobalImageURLModifierBlock
 {
-    objc_setAssociatedObject(self, &MAGWebImageURLModifierBlockKey, magImageURLModifierBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject(self, &MAGWebImageURLModifierBlockKey, magGlobalImageURLModifierBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (MAGWebImageURLModifierBlock)magImageURLModifierBlock
+- (MAGWebImageURLModifierBlock)magGlobalImageURLModifierBlock
 {
     return objc_getAssociatedObject(self, &MAGWebImageURLModifierBlockKey);
 }
 
-- (void)setMagGlobalPlaceholderColor:(UIColor *)magGlobalPlaceholderColor
+- (void)setMagGlobalBackgroundColor:(UIColor *)magGlobalBackgroundColor
 {
-    objc_setAssociatedObject(self, &MAGWebImageGlobalPlaceholderColorKey, magGlobalPlaceholderColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &MAGWebImageGlobalPlaceholderColorKey, magGlobalBackgroundColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (UIColor *)magGlobalPlaceholderColor
+- (UIColor *)magGlobalBackgroundColor
 {
     return objc_getAssociatedObject(self, &MAGWebImageGlobalPlaceholderColorKey);
 }
@@ -103,112 +100,77 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
     return (NSURL *)objc_getAssociatedObject(self, &MAGWebImageOriginalURLKey);
 }
 
-- (void)mag_setImageWithURL:(NSURL *)url
-                    context:(SDWebImageContext *)context
+- (void)sd_setImageWithURL:(nullable NSURL *)url
+                  modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
 {
-    [self mag_setImageWithURL:url placeholderImage:nil options:0 context:context modifier:nil progress:nil completed:nil];
+    [self sd_setImageWithURL:url placeholderImage:nil options:0 context:nil modifier:modifierBlock progress:nil completed:nil];
 }
 
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-                    context:(nullable SDWebImageContext *)context
-                  completed:(nullable SDExternalCompletionBlock)completedBlock
+- (void)sd_setImageWithURL:(nullable NSURL *)url
+          placeholderImage:(nullable UIImage *)placeholder
+                  modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
 {
-    [self mag_setImageWithURL:url placeholderImage:nil options:0 context:context modifier:nil progress:nil completed:completedBlock];
+    [self sd_setImageWithURL:url placeholderImage:placeholder options:0 context:nil modifier:modifierBlock progress:nil completed:nil];
 }
 
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+- (void)sd_setImageWithURL:(nullable NSURL *)url
+          placeholderImage:(nullable UIImage *)placeholder
+                   options:(SDWebImageOptions)options
+                  modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
 {
-    [self mag_setImageWithURL:url placeholderImage:nil options:0 context:nil modifier:modifierBlock progress:nil completed:nil];
+    [self sd_setImageWithURL:url placeholderImage:placeholder options:options context:nil modifier:modifierBlock progress:nil completed:nil];
 }
 
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-           placeholderImage:(nullable UIImage *)placeholder
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+- (void)sd_setImageWithURL:(nullable NSURL *)url
+          placeholderImage:(nullable UIImage *)placeholder
+                   options:(SDWebImageOptions)options
+                   context:(nullable SDWebImageContext *)context
+                  modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
 {
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:0 context:nil modifier:modifierBlock progress:nil completed:nil];
+    [self sd_setImageWithURL:url placeholderImage:placeholder options:options context:context modifier:modifierBlock progress:nil completed:nil];
 }
 
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-                    options:(SDWebImageOptions)options
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+- (void)sd_setImageWithURL:(nullable NSURL *)url
+                  modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+                 completed:(nullable SDExternalCompletionBlock)completedBlock
 {
-    [self mag_setImageWithURL:url placeholderImage:nil options:options context:nil modifier:modifierBlock progress:nil completed:nil];
+    [self sd_setImageWithURL:url placeholderImage:nil options:0 context:nil modifier:modifierBlock progress:nil completed:completedBlock];
 }
 
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-                    context:(nullable SDWebImageContext *)context
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+- (void)sd_setImageWithURL:(nullable NSURL *)url
+          placeholderImage:(nullable UIImage *)placeholder
+                  modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+                 completed:(nullable SDExternalCompletionBlock)completedBlock
 {
-    [self mag_setImageWithURL:url placeholderImage:nil options:0 context:context modifier:modifierBlock progress:nil completed:nil];
+    [self sd_setImageWithURL:url placeholderImage:placeholder options:0 context:nil modifier:modifierBlock progress:nil completed:completedBlock];
 }
 
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-           placeholderImage:(nullable UIImage *)placeholder
-                    options:(SDWebImageOptions)options
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+- (void)sd_setImageWithURL:(nullable NSURL *)url
+          placeholderImage:(nullable UIImage *)placeholder
+                   options:(SDWebImageOptions)options
+                  modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+                 completed:(nullable SDExternalCompletionBlock)completedBlock
 {
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:options context:nil modifier:modifierBlock progress:nil completed:nil];
+    [self sd_setImageWithURL:url placeholderImage:placeholder options:options context:nil modifier:modifierBlock progress:nil completed:completedBlock];
 }
 
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-           placeholderImage:(nullable UIImage *)placeholder
-                    options:(SDWebImageOptions)options
-                    context:(nullable SDWebImageContext *)context
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+- (void)sd_setImageWithURL:(nullable NSURL *)url
+          placeholderImage:(nullable UIImage *)placeholder
+                   options:(SDWebImageOptions)options
+                  modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+                  progress:(nullable SDImageLoaderProgressBlock)progressBlock
+                 completed:(nullable SDExternalCompletionBlock)completedBlock
 {
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:options context:context modifier:modifierBlock progress:nil completed:nil];
+    [self sd_setImageWithURL:url placeholderImage:placeholder options:options context:nil modifier:modifierBlock progress:progressBlock completed:completedBlock];
 }
 
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
-                  completed:(nullable SDExternalCompletionBlock)completedBlock
-{
-    [self mag_setImageWithURL:url placeholderImage:nil options:0 context:nil modifier:modifierBlock progress:nil completed:completedBlock];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-           placeholderImage:(nullable UIImage *)placeholder
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
-                  completed:(nullable SDExternalCompletionBlock)completedBlock
-{
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:0 context:nil modifier:modifierBlock progress:nil completed:completedBlock];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-           placeholderImage:(nullable UIImage *)placeholder
-                    options:(SDWebImageOptions)options
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
-                  completed:(nullable SDExternalCompletionBlock)completedBlock
-{
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:options context:nil modifier:modifierBlock progress:nil completed:completedBlock];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-                    context:(nullable SDWebImageContext *)context
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
-                  completed:(nullable SDExternalCompletionBlock)completedBlock
-{
-    [self mag_setImageWithURL:url placeholderImage:nil options:0 context:context modifier:modifierBlock progress:nil completed:completedBlock];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-           placeholderImage:(nullable UIImage *)placeholder
-                    options:(SDWebImageOptions)options
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
-                   progress:(nullable SDImageLoaderProgressBlock)progressBlock
-                  completed:(nullable SDExternalCompletionBlock)completedBlock
-{
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:options context:nil modifier:modifierBlock progress:progressBlock completed:completedBlock];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-           placeholderImage:(nullable UIImage *)placeholder
-                    options:(SDWebImageOptions)options
-                    context:(nullable SDWebImageContext *)context
-                   modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
-                   progress:(nullable SDImageLoaderProgressBlock)progressBlock
-                  completed:(nullable SDExternalCompletionBlock)completedBlock
+- (void)sd_setImageWithURL:(nullable NSURL *)url
+          placeholderImage:(nullable UIImage *)placeholder
+                   options:(SDWebImageOptions)options
+                   context:(nullable SDWebImageContext *)context
+                  modifier:(nullable MAGWebImageURLModifierBlock)modifierBlock
+                  progress:(nullable SDImageLoaderProgressBlock)progressBlock
+                 completed:(nullable SDExternalCompletionBlock)completedBlock
 {
     [self mag_internalSetImageWithURL:url
                      placeholderImage:placeholder
@@ -218,10 +180,10 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
                         setImageBlock:nil
                              progress:progressBlock
                             completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                                if (completedBlock) {
-                                    completedBlock(image, error, cacheType, imageURL);
-                                }
-                            }];
+        if (completedBlock) {
+            completedBlock(image, error, cacheType, imageURL);
+        }
+    }];
 }
 
 - (void)mag_internalSetImageWithURL:(nullable NSURL *)url
@@ -241,75 +203,39 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
         Class animatedImageClass = [SDAnimatedImage class];
         mutableContext[SDWebImageContextAnimatedImageClass] = animatedImageClass;
     }
-    if (!mutableContext[MAGWebImageContextAnimateKey]) {
-        //没设置则默认只加载第一帧
-        mutableContext[MAGWebImageContextAnimateKey] = @(NO);
-    }
-    if (!mutableContext[MAGWebImageContextPreferredSizeKey]) {
-        //没有设置则取self.magPreferedSize
-        mutableContext[MAGWebImageContextPreferredSizeKey] = [NSValue valueWithCGSize:self.magPreferedSize];
-    }
-    //保存初始URL
+    /// 保存初始URL
     self.magOriginImageURL = url;
-    if (self.magOriginImageURL) {
-        //存在则保存
-        mutableContext[MAGWebImageContextOriginalURLKey] = self.magOriginImageURL;
-    }
-    //是否需要只展示图片第一帧
-    BOOL decodeFirstFrame = options & SDWebImageDecodeFirstFrameOnly;
-    if (decodeFirstFrame) {
-        //如果主动传入SDWebImageDecodeFirstFrameOnly
-        //说明希望只显示第一帧，所以强行纠正参数值
-        mutableContext[MAGWebImageContextAnimateKey] = @(NO);
-    } else {
-        //如果没有主动传入SDWebImageDecodeFirstFrameOnly
-        //根据MAGWebImageContextAnimateKey参数来控制是否显示第一帧
-        BOOL animateEnabled = [mutableContext[MAGWebImageContextAnimateKey] boolValue];
-        if (!animateEnabled) {
-            options |= SDWebImageDecodeFirstFrameOnly;
-        } else {
-            //不处理
-        }
-    }
-    //设置背景颜色
-    SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
-    if (imageManager.magGlobalPlaceholderColor) {
-        self.backgroundColor = imageManager.magGlobalPlaceholderColor;
-    } else {
-        if (mutableContext[MAGWebImageContextPlaceholderColorKey]) {
-            //自定义颜色
-            self.backgroundColor = mutableContext[MAGWebImageContextPlaceholderColorKey];
-        } else {
-            //不作处理
-        }
-    }
-    //设置缺省图片
-    if (!placeholder) {
-        //没有传入缺省图片，则设置全局缺省图片
-        SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
-        if (imageManager.magGlobalPlaceholderImage) {
-            placeholder = imageManager.magGlobalPlaceholderImage;
-        } else {
-            if (mutableContext[MAGWebImageContextPlaceholderImageKey]) {
-                //自定义缺省图片
-                placeholder = mutableContext[MAGWebImageContextPlaceholderImageKey];
-            } else {
-                //不作处理
+    if (mutableContext[MAGWebImageContextUseGlobalBackgroundColorKey]) {
+        /// 是否使用全局背景颜色
+        BOOL useGlobalPlaceholderColor = [mutableContext[MAGWebImageContextUseGlobalBackgroundColorKey] boolValue];
+        if (useGlobalPlaceholderColor) {
+            SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
+            if (imageManager.magGlobalBackgroundColor) {
+                self.backgroundColor = imageManager.magGlobalBackgroundColor;
             }
         }
-    } else {
-        //直接使用placeholder
+    }
+    /// 缺省图片
+    if (!placeholder) {
+        if (mutableContext[MAGWebImageContextUseGlobalPlaceholderImageKey]) {
+            /// 是否使用全局缺省图片
+            BOOL useGlobalPlaceholderImage = [mutableContext[MAGWebImageContextUseGlobalPlaceholderImageKey] boolValue];
+            if (useGlobalPlaceholderImage) {
+                SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
+                if (imageManager.magGlobalPlaceholderImage) {
+                    placeholder = imageManager.magGlobalPlaceholderImage;
+                }
+            }
+        }
     }
     context = [mutableContext copy];
     if (modifierBlock) {
         //如果实现了modifierBlock，则忽略SDWebImageManager的imageURLModifierBlock
-        url = modifierBlock(self.magOriginImageURL, context);
+        url = modifierBlock(self, self.magOriginImageURL, context);
     } else {
         SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
-        if (imageManager.magImageURLModifierBlock) {
-            url = imageManager.magImageURLModifierBlock(self.magOriginImageURL, context);
-        } else {
-            //不处理
+        if (imageManager.magGlobalImageURLModifierBlock) {
+            url = imageManager.magGlobalImageURLModifierBlock(self, self.magOriginImageURL, context);
         }
     }
     [self sd_internalSetImageWithURL:url
@@ -319,58 +245,6 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
                        setImageBlock:nil
                             progress:progressBlock
                            completed:completedBlock];
-}
-
-#pragma mark ---------- MAGExtends end ----------
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url
-{
-    [self mag_setImageWithURL:url modifier:nil];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url placeholderImage:(nullable UIImage *)placeholder
-{
-    [self mag_setImageWithURL:url placeholderImage:placeholder modifier:nil];
-}
-
-- (void)mag_setImageWithURL:(NSURL *)url options:(SDWebImageOptions)options
-{
-    [self mag_setImageWithURL:url options:options modifier:nil];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(SDWebImageOptions)options
-{
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:options modifier:nil];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(SDWebImageOptions)options context:(nullable SDWebImageContext *)context
-{
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:options context:context modifier:nil];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url completed:(nullable SDExternalCompletionBlock)completedBlock
-{
-    [self mag_setImageWithURL:url modifier:nil completed:completedBlock];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url placeholderImage:(nullable UIImage *)placeholder completed:(nullable SDExternalCompletionBlock)completedBlock
-{
-    [self mag_setImageWithURL:url placeholderImage:placeholder modifier:nil completed:completedBlock];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(SDWebImageOptions)options completed:(nullable SDExternalCompletionBlock)completedBlock
-{
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:options modifier:nil completed:completedBlock];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(SDWebImageOptions)options progress:(nullable SDImageLoaderProgressBlock)progressBlock completed:(nullable SDExternalCompletionBlock)completedBlock
-{
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:options modifier:nil progress:progressBlock completed:completedBlock];
-}
-
-- (void)mag_setImageWithURL:(nullable NSURL *)url placeholderImage:(nullable UIImage *)placeholder options:(SDWebImageOptions)options context:(nullable SDWebImageContext *)context progress:(nullable SDImageLoaderProgressBlock)progressBlock completed:(nullable SDExternalCompletionBlock)completedBlock
-{
-    [self mag_setImageWithURL:url placeholderImage:placeholder options:options context:context modifier:nil progress:progressBlock completed:completedBlock];
 }
 
 @end

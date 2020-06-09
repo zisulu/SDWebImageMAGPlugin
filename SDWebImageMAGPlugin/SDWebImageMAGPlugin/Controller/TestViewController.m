@@ -51,7 +51,7 @@
     NSURL *animatedWebPURL = [NSURL URLWithString:@"http://littlesvr.ca/apng/images/world-cup-2014-42.webp"];
     NSURL *animatedGIFURL = [NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556085525711&di=d384bbc45c79d4ff6dae4bd876070afe&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20160825%2F2c3cd3f9145448bd843ab9fb5a624dd2_th.gif"];
     
-    [self.imageView1 mag_setImageWithURL:staticWebPURL completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    [self.imageView1 sd_setImageWithURL:staticWebPURL completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         if (image) {
             NSLog(@"%@", @"Static WebP load success");
         }
@@ -62,10 +62,7 @@
             }
         });
     }];
-    SDWebImageContext *context = @{
-                                   MAGWebImageContextAnimateKey : @(YES),
-                                   };
-    [self.imageView2 mag_setImageWithURL:animatedWebPURL context:context modifier:^NSURL * _Nullable(NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
+    [self.imageView2 sd_setImageWithURL:animatedWebPURL modifier:^NSURL * _Nullable(NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
         NSString *imageUrl = originImageURL.absoluteString;
         imageUrl = [NSString stringWithFormat:@"%@?%@", imageUrl, @"params=12345"];
         return [NSURL URLWithString:imageUrl];
