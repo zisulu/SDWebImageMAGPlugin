@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <SDWebImage/SDWebImage.h>
 #import <SDWebImageWebPCoder/SDWebImageWebPCoder.h>
 
 NS_ASSUME_NONNULL_BEGIN

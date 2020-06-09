@@ -43,6 +43,7 @@
     [self.view addSubview:self.imageView1];
     
     self.imageView2 = [SDAnimatedImageView new];
+    self.imageView2.autoPlayAnimatedImage = NO;
     self.imageView2.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:self.imageView2];
     
@@ -71,6 +72,10 @@
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         if (image) {
             NSLog(@"%@:%@", @"Animated WebP load success", imageURL.absoluteString);
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.imageView2 startAnimating];
+                NSLog(@"Animated WebP startAnimating");
+            });
         }
     }];
 }
