@@ -8,6 +8,7 @@
 
 #import "TestViewController.h"
 #import "UIImageView+MAGWebCache.h"
+#import "MAGWebImageConfig.h"
 
 @interface MAGImageView : SDAnimatedImageView
 
@@ -36,7 +37,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[SDImageCodersManager sharedManager] addCoder:[SDImageWebPCoder sharedCoder]];
+    [MAGWebImageConfig setupSDWebImage];
     
     self.imageView1 = [UIImageView new];
     self.imageView1.contentMode = UIViewContentModeScaleAspectFit;
@@ -45,6 +46,7 @@
     self.imageView2 = [SDAnimatedImageView new];
     self.imageView2.autoPlayAnimatedImage = NO;
     self.imageView2.contentMode = UIViewContentModeScaleAspectFit;
+    self.imageView2.magPreferedSize = CGSizeMake(100, 100);
     [self.view addSubview:self.imageView2];
     
     NSURL *staticWebPURL = [NSURL URLWithString:@"https://www.gstatic.com/webp/gallery/2.webp"];
@@ -53,7 +55,7 @@
     
     [self.imageView1 sd_setImageWithURL:staticWebPURL completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         if (image) {
-            NSLog(@"%@", @"Static WebP load success");
+            NSLog(@"%@:%@", @"Static WebP load success", imageURL);
         }
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             NSData *webpData = [image sd_imageDataAsFormat:SDImageFormatWebP];
@@ -62,19 +64,19 @@
             }
         });
     }];
-    [self.imageView2 sd_setImageWithURL:animatedWebPURL modifier:^NSURL * _Nullable(__kindof UIView * _Nonnull sd_view, NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
-        NSString *imageUrl = originImageURL.absoluteString;
-        imageUrl = [NSString stringWithFormat:@"%@?%@", imageUrl, @"params=12345"];
-        return [NSURL URLWithString:imageUrl];
-    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-        if (image) {
-            NSLog(@"%@:%@", @"Animated WebP load success", imageURL.absoluteString);
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.imageView2 startAnimating];
-                NSLog(@"Animated WebP startAnimating");
-            });
-        }
-    }];
+//    [self.imageView2 sd_setImageWithURL:animatedWebPURL modifier:^NSURL * _Nullable(__kindof UIImageView * _Nonnull sd_imageView, NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
+//        NSString *imageUrl = originImageURL.absoluteString;
+//        imageUrl = [NSString stringWithFormat:@"%@?%@&width=%.0f&height=%.0f", imageUrl, @"params=12345", sd_imageView.magPreferedWidth, sd_imageView.magPreferedHeight];
+//        return [NSURL URLWithString:imageUrl];
+//    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+//        if (image) {
+//            NSLog(@"%@:%@", @"Animated WebP load success", imageURL.absoluteString);
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                [self.imageView2 startAnimating];
+//                NSLog(@"Animated WebP startAnimating");
+//            });
+//        }
+//    }];
 }
 
 - (void)viewWillLayoutSubviews {

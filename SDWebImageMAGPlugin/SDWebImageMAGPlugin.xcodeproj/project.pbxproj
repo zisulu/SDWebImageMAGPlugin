@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		58720E712511E98000FA099A /* MAGWebImageConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 58720E702511E98000FA099A /* MAGWebImageConfig.m */; };
 		CC5C176B492E2A178E1E1C74 /* libPods-SDWebImageMAGPlugin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C4029C6E28359641CADDB41 /* libPods-SDWebImageMAGPlugin.a */; };
 		F885FD35227B43D100E9B9EE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F885FD34227B43D100E9B9EE /* AppDelegate.m */; };
 		F885FD3D227B43D400E9B9EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F885FD3C227B43D400E9B9EE /* Assets.xcassets */; };
@@ -37,6 +38,8 @@
 
 /* Begin PBXFileReference section */
 		1C4029C6E28359641CADDB41 /* libPods-SDWebImageMAGPlugin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SDWebImageMAGPlugin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		58720E6F2511E98000FA099A /* MAGWebImageConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAGWebImageConfig.h; sourceTree = "<group>"; };
+		58720E702511E98000FA099A /* MAGWebImageConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAGWebImageConfig.m; sourceTree = "<group>"; };
 		6280B0A7FB39344CD90F87FA /* Pods-SDWebImageMAGPlugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImageMAGPlugin.debug.xcconfig"; path = "Target Support Files/Pods-SDWebImageMAGPlugin/Pods-SDWebImageMAGPlugin.debug.xcconfig"; sourceTree = "<group>"; };
 		E4FB39D5C8907AF3D6384027 /* Pods-SDWebImageMAGPlugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImageMAGPlugin.release.xcconfig"; path = "Target Support Files/Pods-SDWebImageMAGPlugin/Pods-SDWebImageMAGPlugin.release.xcconfig"; sourceTree = "<group>"; };
 		F885FD30227B43D100E9B9EE /* SDWebImageMAGPlugin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SDWebImageMAGPlugin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,6 +173,8 @@
 			children = (
 				F885FD6A227B440600E9B9EE /* UIImageView+MAGWebCache.h */,
 				F885FD69227B440600E9B9EE /* UIImageView+MAGWebCache.m */,
+				58720E6F2511E98000FA099A /* MAGWebImageConfig.h */,
+				58720E702511E98000FA099A /* MAGWebImageConfig.m */,
 			);
 			path = Plugin;
 			sourceTree = "<group>";
@@ -332,6 +337,7 @@
 				F885FD6B227B440700E9B9EE /* TestViewController.m in Sources */,
 				F885FD43227B43D400E9B9EE /* main.m in Sources */,
 				F885FD6C227B440700E9B9EE /* UIImageView+MAGWebCache.m in Sources */,
+				58720E712511E98000FA099A /* MAGWebImageConfig.m in Sources */,
 				F885FD35227B43D100E9B9EE /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
