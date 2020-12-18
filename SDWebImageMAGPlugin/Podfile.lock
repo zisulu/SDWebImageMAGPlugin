@@ -8,16 +8,16 @@ PODS:
   - libwebp/mux (1.1.0):
     - libwebp/demux
   - libwebp/webp (1.1.0)
-  - SDWebImage (5.9.1):
-    - SDWebImage/Core (= 5.9.1)
-  - SDWebImage/Core (5.9.1)
-  - SDWebImageWebPCoder (0.6.1):
+  - SDWebImage (5.10.0):
+    - SDWebImage/Core (= 5.10.0)
+  - SDWebImage/Core (5.10.0)
+  - SDWebImageWebPCoder (0.8.0):
     - libwebp (~> 1.0)
-    - SDWebImage/Core (~> 5.7)
+    - SDWebImage/Core (~> 5.10)
 
 DEPENDENCIES:
-  - SDWebImage (~> 5.9)
-  - SDWebImageWebPCoder (~> 0.6)
+  - SDWebImage (~> 5.10.0)
+  - SDWebImageWebPCoder (~> 0.8.0)
 
 SPEC REPOS:
   trunk:
@@ -27,9 +27,9 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
-  SDWebImage: a990c053fff71e388a10f3357edb0be17929c9c5
-  SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
+  SDWebImage: 9169792e9eec3e45bba2a0c02f74bf8bd922d1ee
+  SDWebImageWebPCoder: e5f9fae2face076b66b19fba5e13b405e4d3f335
 
-PODFILE CHECKSUM: d664bac5aad7f930ea176ad7fdf9efa2c2497c1b
+PODFILE CHECKSUM: 096c7f091897cf865dbf4fb02939c150315496d0
 
 COCOAPODS: 1.9.1

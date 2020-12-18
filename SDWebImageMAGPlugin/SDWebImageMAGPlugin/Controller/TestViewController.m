@@ -64,19 +64,19 @@
             }
         });
     }];
-//    [self.imageView2 sd_setImageWithURL:animatedWebPURL modifier:^NSURL * _Nullable(__kindof UIImageView * _Nonnull sd_imageView, NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
-//        NSString *imageUrl = originImageURL.absoluteString;
+    [self.imageView2 sd_setImageWithURL:animatedWebPURL modifier:^NSURL * _Nullable(__kindof UIImageView * _Nonnull sd_imageView, NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
+        NSString *imageUrl = originImageURL.absoluteString;
 //        imageUrl = [NSString stringWithFormat:@"%@?%@&width=%.0f&height=%.0f", imageUrl, @"params=12345", sd_imageView.magPreferedWidth, sd_imageView.magPreferedHeight];
-//        return [NSURL URLWithString:imageUrl];
-//    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-//        if (image) {
-//            NSLog(@"%@:%@", @"Animated WebP load success", imageURL.absoluteString);
-//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                [self.imageView2 startAnimating];
-//                NSLog(@"Animated WebP startAnimating");
-//            });
-//        }
-//    }];
+        return originImageURL;//[NSURL URLWithString:imageUrl];
+    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        if (image) {
+            NSLog(@"%@:%@", @"Animated WebP load success", imageURL.absoluteString);
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.imageView2 startAnimating];
+                NSLog(@"Animated WebP startAnimating");
+            });
+        }
+    }];
 }
 
 - (void)viewWillLayoutSubviews {
