@@ -12,13 +12,16 @@
 
 + (void)setupSDWebImage
 {
+#if MAGSDWebPCoderEnabled
     /// 支持 webp
     [[SDImageCodersManager sharedManager] addCoder:[SDImageWebPCoder sharedCoder]];
+#endif
+#if MAGSDWebImageEnabled
 //#if DEBUG
 //    SDWebImageDownloaderRequestModifier *requestModifier = [SDWebImageDownloaderRequestModifier mag_webImageDownloaderRequestModifier:^NSURLRequest * _Nullable(NSURLRequest * _Nonnull request) {
 //        if (request.URL && request.URL.query.length == 0) {
 //            NSString *url = request.URL.absoluteString;
-////            url = [url stringByAppendingFormat:@"?%@", @"params=12345"];
+//            //            url = [url stringByAppendingFormat:@"?%@", @"params=12345"];
 //            NSURL *modifiedURL = [NSURL URLWithString:url];
 //            /// modifiedURLRequest 的配置必须保持和 request 一模一样
 //            NSMutableURLRequest *modifiedURLRequest = [NSMutableURLRequest requestWithURL:modifiedURL cachePolicy:request.cachePolicy timeoutInterval:request.timeoutInterval];
@@ -31,14 +34,18 @@
 //    }];
 //    [[SDWebImageDownloader sharedDownloader] setRequestModifier:requestModifier];
 //#endif
-    
+    /// 全局配置
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     /// 全局背景色
     manager.magGlobalBackgroundColor = [UIColor blueColor];
     /// 全局链接处理
     [manager setMagGlobalImageURLModifierBlock:^NSURL * _Nullable(__kindof UIView * _Nonnull magView, NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
+//        NSString *url = originImageURL.ab
+//        url = [MAGUrlFilter filteredImageURL:url frameSize:imageView.magPreferedSize];
         return originImageURL;
     }];
+#endif
+
 }
 
 @end

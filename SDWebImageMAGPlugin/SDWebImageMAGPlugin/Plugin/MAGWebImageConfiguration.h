@@ -7,12 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UIView+MAGWebCache.h"
 #if __has_include(<SDWebImageWebPCoder/SDWebImageWebPCoder.h>)
 #import <SDWebImageWebPCoder/SDWebImageWebPCoder.h>
 #elif __has_include("SDWebImageWebPCoder.h")
 @import SDWebImageWebPCoder;
 #endif
-#import "UIView+MAGWebCache.h"
+
+#define MAGSDWebPCoderEnabled (__has_include(<SDWebImageWebPCoder/SDWebImageWebPCoder.h>) || __has_include("SDWebImageWebPCoder.h"))
 
 NS_ASSUME_NONNULL_BEGIN
 
