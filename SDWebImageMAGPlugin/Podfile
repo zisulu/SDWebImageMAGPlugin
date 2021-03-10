@@ -4,8 +4,8 @@ inhibit_all_warnings!
 
 target 'SDWebImageMAGPlugin' do
   
-  pod 'SDWebImage', '~> 5.10.0'
-  pod 'SDWebImageWebPCoder', '~> 0.8.0'
+  pod 'SDWebImage', '5.10.4'
+  pod 'SDWebImageWebPCoder', '0.8.3'
   
   post_install do |installer|
     installer.pods_project.targets.each do |target|

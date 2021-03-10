@@ -736,6 +736,9 @@ static CGSize SDCalculateThumbnailSize(CGSize fullSize, BOOL preserveAspectRatio
     }
     
     size_t bytesPerRow = CGImageGetBytesPerRow(imageRef);
+    size_t bitsPerComponent = CGImageGetBitsPerComponent(imageRef);
+    size_t bitsPerPixel = CGImageGetBitsPerPixel(imageRef);
+    size_t components = bitsPerPixel / bitsPerComponent;
     CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(imageRef);
     CGImageAlphaInfo alphaInfo = bitmapInfo & kCGBitmapAlphaInfoMask;
     CGBitmapInfo byteOrderInfo = bitmapInfo & kCGBitmapByteOrderMask;
@@ -759,15 +762,21 @@ static CGSize SDCalculateThumbnailSize(CGSize fullSize, BOOL preserveAspectRatio
     if (!dataProvider) {
         return nil;
     }
-    CFDataRef dataRef = CGDataProviderCopyData(dataProvider);
-    if (!dataRef) {
-        return nil;
-    }
+    // Check colorSpace is RGB/RGBA
+    CGColorSpaceRef colorSpace = CGImageGetColorSpace(imageRef);
+    BOOL isRGB = CGColorSpaceGetModel(colorSpace) == kCGColorSpaceModelRGB;
     
+    CFDataRef dataRef;
     uint8_t *rgba = NULL; // RGBA Buffer managed by CFData, don't call `free` on it, instead call `CFRelease` on `dataRef`
     // We could not assume that input CGImage's color mode is always RGB888/RGBA8888. Convert all other cases to target color mode using vImage
-    if (byteOrderNormal && ((alphaInfo == kCGImageAlphaNone) || (alphaInfo == kCGImageAlphaLast))) {
+    BOOL isRGB888 = isRGB && byteOrderNormal && alphaInfo == kCGImageAlphaNone && components == 3;
+    BOOL isRGBA8888 = isRGB && byteOrderNormal && alphaInfo == kCGImageAlphaLast && components == 4;
+    if (isRGB888 || isRGBA8888) {
         // If the input CGImage is already RGB888/RGBA8888
+        dataRef = CGDataProviderCopyData(dataProvider);
+        if (!dataRef) {
+            return nil;
+        }
         rgba = (uint8_t *)CFDataGetBytePtr(dataRef);
     } else {
         // Convert all other cases to target color mode using vImage
@@ -775,10 +784,11 @@ static CGSize SDCalculateThumbnailSize(CGSize fullSize, BOOL preserveAspectRatio
         vImage_Error error = kvImageNoError;
         
         vImage_CGImageFormat srcFormat = {
-            .bitsPerComponent = (uint32_t)CGImageGetBitsPerComponent(imageRef),
-            .bitsPerPixel = (uint32_t)CGImageGetBitsPerPixel(imageRef),
-            .colorSpace = CGImageGetColorSpace(imageRef),
-            .bitmapInfo = bitmapInfo
+            .bitsPerComponent = (uint32_t)bitsPerComponent,
+            .bitsPerPixel = (uint32_t)bitsPerPixel,
+            .colorSpace = colorSpace,
+            .bitmapInfo = bitmapInfo,
+            .renderingIntent = CGImageGetRenderingIntent(imageRef)
         };
         vImage_CGImageFormat destFormat = {
             .bitsPerComponent = 8,
@@ -789,36 +799,37 @@ static CGSize SDCalculateThumbnailSize(CGSize fullSize, BOOL preserveAspectRatio
         
         convertor = vImageConverter_CreateWithCGImageFormat(&srcFormat, &destFormat, NULL, kvImageNoFlags, &error);
         if (error != kvImageNoError) {
-            CFRelease(dataRef);
             return nil;
         }
         
-        vImage_Buffer src = {
-            .data = (uint8_t *)CFDataGetBytePtr(dataRef),
-            .width = width,
-            .height = height,
-            .rowBytes = bytesPerRow
-        };
-        vImage_Buffer dest;
+        vImage_Buffer src;
+        error = vImageBuffer_InitWithCGImage(&src, &srcFormat, nil, imageRef, kvImageNoFlags);
+        if (error != kvImageNoError) {
+            vImageConverter_Release(convertor);
+            return nil;
+        }
         
+        vImage_Buffer dest;
         error = vImageBuffer_Init(&dest, height, width, destFormat.bitsPerPixel, kvImageNoFlags);
         if (error != kvImageNoError) {
             vImageConverter_Release(convertor);
-            CFRelease(dataRef);
+            free(src.data);
             return nil;
         }
         
         // Convert input color mode to RGB888/RGBA8888
         error = vImageConvert_AnyToAny(convertor, &src, &dest, NULL, kvImageNoFlags);
+        
+        // Free the buffer
+        free(src.data);
         vImageConverter_Release(convertor);
         if (error != kvImageNoError) {
-            CFRelease(dataRef);
+            free(dest.data);
             return nil;
         }
         
         rgba = dest.data; // Converted buffer
         bytesPerRow = dest.rowBytes; // Converted bytePerRow
-        CFRelease(dataRef); // Use CFData to manage bytes for free, the same code path for error handling
         dataRef = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, rgba, bytesPerRow * height, kCFAllocatorDefault);
     }
     
@@ -891,85 +902,52 @@ static CGSize SDCalculateThumbnailSize(CGSize fullSize, BOOL preserveAspectRatio
     config->target_size = (int)maxFileSize; // Max filesize for output, 0 means use quality instead
     config->pass = maxFileSize > 0 ? 6 : 1; // Use 6 passes for file size limited encoding, which is the default value of `cwebp` command line
     config->lossless = 0; // Disable lossless encoding (If we need, can add new Encoding Options in future version)
-
-    if ([options[SDImageCoderEncodeWebPMethod] intValue]) {
-        config->method = [options[SDImageCoderEncodeWebPMethod] intValue];
-    }
-    if ([options[SDImageCoderEncodeWebPPass] intValue]) {
-        config->pass = [options[SDImageCoderEncodeWebPPass] intValue];
-    }
-    if ([options[SDImageCoderEncodeWebPPreprocessing] intValue]) {
-        config->preprocessing = [options[SDImageCoderEncodeWebPPreprocessing] intValue];
-    }
-    if ([options[SDImageCoderEncodeWebPThreadLevel] intValue]) {
-        config->thread_level = [options[SDImageCoderEncodeWebPThreadLevel] intValue];
-    } else {
-        config->thread_level = 1;
-    }
-    if ([options[SDImageCoderEncodeWebPLowMemory] intValue]) {
-        config->low_memory = [options[SDImageCoderEncodeWebPLowMemory] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPTargetPSNR] floatValue]) {
-        config->target_PSNR = [options[SDImageCoderEncodeWebPTargetPSNR] floatValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPSegments] intValue]) {
-        config->segments = [options[SDImageCoderEncodeWebPSegments] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPSnsStrength] intValue]) {
-        config->sns_strength = [options[SDImageCoderEncodeWebPSnsStrength] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPFilterStrength] intValue]) {
-        config->filter_strength = [options[SDImageCoderEncodeWebPFilterStrength] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPFilterSharpness] intValue]) {
-        config->filter_sharpness = [options[SDImageCoderEncodeWebPFilterSharpness] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPFilterType] intValue]) {
-        config->filter_type = [options[SDImageCoderEncodeWebPFilterType] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPAutofilter] intValue]) {
-        config->autofilter = [options[SDImageCoderEncodeWebPAutofilter] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPAlphaCompression] intValue]) {
-        config->alpha_compression = [options[SDImageCoderEncodeWebPAlphaCompression] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPAlphaFiltering] intValue]) {
-        config->alpha_filtering = [options[SDImageCoderEncodeWebPAlphaFiltering] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPAlphaQuality] intValue]) {
-        config->alpha_quality = [options[SDImageCoderEncodeWebPAlphaQuality] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPShowCompressed] intValue]) {
-        config->show_compressed = [options[SDImageCoderEncodeWebPShowCompressed] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPPartitions] intValue]) {
-        config->partitions = [options[SDImageCoderEncodeWebPPartitions] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPPartitionLimit] intValue]) {
-        config->partition_limit = [options[SDImageCoderEncodeWebPPartitionLimit] intValue];
-    }
-
-    if ([options[SDImageCoderEncodeWebPUseSharpYuv] intValue]) {
-        config->use_sharp_yuv = [options[SDImageCoderEncodeWebPUseSharpYuv] intValue];
-    }
+    
+    config->method = GetIntValueForKey(options, SDImageCoderEncodeWebPMethod, config->method);
+    config->pass = GetIntValueForKey(options, SDImageCoderEncodeWebPPass, config->pass);
+    config->preprocessing = GetIntValueForKey(options, SDImageCoderEncodeWebPPreprocessing, config->preprocessing);
+    config->thread_level = GetIntValueForKey(options, SDImageCoderEncodeWebPThreadLevel, 1);
+    config->low_memory = GetIntValueForKey(options, SDImageCoderEncodeWebPLowMemory, config->low_memory);
+    config->target_PSNR = GetFloatValueForKey(options, SDImageCoderEncodeWebPTargetPSNR, config->target_PSNR);
+    config->segments = GetIntValueForKey(options, SDImageCoderEncodeWebPSegments, config->segments);
+    config->sns_strength = GetIntValueForKey(options, SDImageCoderEncodeWebPSnsStrength, config->sns_strength);
+    config->filter_strength = GetIntValueForKey(options, SDImageCoderEncodeWebPFilterStrength, config->filter_strength);
+    config->filter_sharpness = GetIntValueForKey(options, SDImageCoderEncodeWebPFilterSharpness, config->filter_sharpness);
+    config->filter_type = GetIntValueForKey(options, SDImageCoderEncodeWebPFilterType, config->filter_type);
+    config->autofilter = GetIntValueForKey(options, SDImageCoderEncodeWebPAutofilter, config->autofilter);
+    config->alpha_compression = GetIntValueForKey(options, SDImageCoderEncodeWebPAlphaCompression, config->alpha_compression);
+    config->alpha_filtering = GetIntValueForKey(options, SDImageCoderEncodeWebPAlphaFiltering, config->alpha_filtering);
+    config->alpha_quality = GetIntValueForKey(options, SDImageCoderEncodeWebPAlphaQuality, config->alpha_quality);
+    config->show_compressed = GetIntValueForKey(options, SDImageCoderEncodeWebPShowCompressed, config->show_compressed);
+    config->partitions = GetIntValueForKey(options, SDImageCoderEncodeWebPPartitions, config->partitions);
+    config->partition_limit = GetIntValueForKey(options, SDImageCoderEncodeWebPPartitionLimit, config->partition_limit);
+    config->use_sharp_yuv = GetIntValueForKey(options, SDImageCoderEncodeWebPUseSharpYuv, config->use_sharp_yuv);
 }
 
 static void FreeImageData(void *info, const void *data, size_t size) {
     free((void *)data);
 }
+
+static int GetIntValueForKey(NSDictionary * _Nonnull dictionary, NSString * _Nonnull key, int defaultValue) {
+    id value = [dictionary objectForKey:key];
+    if (value != nil) {
+        if ([value isKindOfClass: [NSNumber class]]) {
+            return [value intValue];
+        }
+    }
+    return defaultValue;
+}
+
+static float GetFloatValueForKey(NSDictionary * _Nonnull dictionary, NSString * _Nonnull key, float defaultValue) {
+    id value = [dictionary objectForKey:key];
+    if (value != nil) {
+        if ([value isKindOfClass: [NSNumber class]]) {
+            return [value floatValue];
+        }
+    }
+    return defaultValue;
+}
+
 
 #pragma mark - SDAnimatedImageCoder
 - (instancetype)initWithAnimatedImageData:(NSData *)data options:(nullable SDImageCoderOptions *)options {
