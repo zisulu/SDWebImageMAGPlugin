@@ -47,6 +47,25 @@ static const char MAGWebImagePreferedHieghtKey = '\0';
     return CGSizeMake(self.magPreferedWidth, self.magPreferedHeight);
 }
 
+static const char MAGWebImageAutoPlayAnimatedImagKey = '\0';
+
+- (BOOL)magAutoPlayAnimatedImage
+{
+    BOOL result = NO;
+    NSNumber *autoPlayAnimatedImage = (NSNumber *)objc_getAssociatedObject(self, &MAGWebImageAutoPlayAnimatedImagKey);
+    if (autoPlayAnimatedImage) {
+        result = [autoPlayAnimatedImage boolValue];
+    } else {
+        [self setMagAutoPlayAnimatedImage:result];
+    }
+    return result;
+}
+
+- (void)setMagAutoPlayAnimatedImage:(BOOL)magAutoPlayAnimatedImage
+{
+    objc_setAssociatedObject(self, &MAGWebImageAutoPlayAnimatedImagKey, @(magAutoPlayAnimatedImage), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 @end
 
 #if MAGSDWebImageEnabled
@@ -150,15 +169,27 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
     }
     SDWebImageMutableContext *mutableContext = [context mutableCopy];
     if ([self isKindOfClass:[SDAnimatedImageView class]]) {
-        Class animatedImageClass = [SDAnimatedImage class];
-        mutableContext[SDWebImageContextAnimatedImageClass] = animatedImageClass;
-    }
+        /// SDAnimatedImageView
+    } else
 #if MAGSDFLPluginEnabled
-    else if ([self isKindOfClass:[FLAnimatedImageView class]]) {
-        Class animatedImageClass = [SDFLAnimatedImage class];
-        mutableContext[SDWebImageContextAnimatedImageClass] = animatedImageClass;
-    }
+    if ([self isKindOfClass:[FLAnimatedImageView class]]) {
+        /// FLAnimatedImageView
+    } else
 #endif
+    {
+        /// Common UIImageView or Others
+        if (![self magAutoPlayAnimatedImage]) {
+            if (options != kNilOptions) {
+                if (options&SDWebImageDecodeFirstFrameOnly) {
+                    /// 已经包含则不处理
+                } else {
+                    options = options&SDWebImageDecodeFirstFrameOnly;
+                }
+            } else {
+                options = SDWebImageDecodeFirstFrameOnly;
+            }
+        }
+    }
     /// 全局背景色
     BOOL useGlobalBackgroundColor = YES;
     if (mutableContext[MAGWebImageContextUseGlobalBackgroundColorKey]) {
@@ -295,27 +326,27 @@ static const char MAGWebImageOriginalURLKey = '\0';
 
 - (void)mag_setShouldAnimate:(BOOL)animated
 {
-    BOOL result = self.magAutoPlayAnimatedImage && animated;
+    BOOL result = self.magAutoPlayFLAnimatedImage && animated;
     [self mag_setShouldAnimate:result];
 }
 
 static const char MAGWebImageFLAutoPlayAnimatedImagKey = '\0';
 
-- (BOOL)magAutoPlayAnimatedImage
+- (BOOL)magAutoPlayFLAnimatedImage
 {
     BOOL result = YES;
     NSNumber *autoPlayAnimatedImage = (NSNumber *)objc_getAssociatedObject(self, &MAGWebImageFLAutoPlayAnimatedImagKey);
     if (autoPlayAnimatedImage) {
         result = [autoPlayAnimatedImage boolValue];
     } else {
-        [self setMagAutoPlayAnimatedImage:YES];
+        [self setMagAutoPlayFLAnimatedImage:result];
     }
     return result;
 }
 
-- (void)setMagAutoPlayAnimatedImage:(BOOL)magAutoPlayAnimatedImage
+- (void)setMagAutoPlayFLAnimatedImage:(BOOL)magAutoPlayFLAnimatedImage
 {
-    objc_setAssociatedObject(self, &MAGWebImageFLAutoPlayAnimatedImagKey, @(magAutoPlayAnimatedImage), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &MAGWebImageFLAutoPlayAnimatedImagKey, @(magAutoPlayFLAnimatedImage), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end
