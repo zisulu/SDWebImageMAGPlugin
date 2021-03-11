@@ -87,8 +87,8 @@ typedef NSURL *_Nullable(^MAGWebImageURLModifierBlock)(__kindof UIView *magView,
 
 /// Get the original image URL.
 /// @note 由于定制可能会修改图片URL，所以提供此参数获取未修改的图片URL；
-/// 如果未进行修改则 magOriginImageURL == mag_imageURL == 未修改的图片URL；
-/// 如果进行修改则 magOriginImageURL == 未修改的图片URL；mag_imageURL == 已修改的图片URL；
+/// 如果未进行修改则 magOriginImageURL == sd_imageURL == 未修改的图片URL；
+/// 如果进行修改则 magOriginImageURL == 未修改的图片URL；sd_imageURL == 已修改的图片URL；
 @property (nullable, nonatomic, strong, readonly) NSURL *magOriginImageURL;
 
 @end
