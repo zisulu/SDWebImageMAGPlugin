@@ -143,6 +143,8 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
                            progress:(nullable SDImageLoaderProgressBlock)progressBlock
                           completed:(nullable SDInternalCompletionBlock)completedBlock
 {
+    /// 保存初始URL
+    self.magOriginImageURL = url;
     if (!context) {
         context = [NSDictionary dictionary];
     }
@@ -151,14 +153,18 @@ static const char MAGWebImageGlobalPlaceholderImageKey                 = '\0';
         Class animatedImageClass = [SDAnimatedImage class];
         mutableContext[SDWebImageContextAnimatedImageClass] = animatedImageClass;
     }
-    /// 保存初始URL
-    self.magOriginImageURL = url;
+#if MAGSDFLPluginEnabled
+    else if ([self isKindOfClass:[FLAnimatedImageView class]]) {
+        Class animatedImageClass = [SDFLAnimatedImage class];
+        mutableContext[SDWebImageContextAnimatedImageClass] = animatedImageClass;
+    }
+#endif
+    /// 全局背景色
     BOOL useGlobalBackgroundColor = YES;
     if (mutableContext[MAGWebImageContextUseGlobalBackgroundColorKey]) {
         /// 是否使用全局背景颜色
         useGlobalBackgroundColor = [mutableContext[MAGWebImageContextUseGlobalBackgroundColorKey] boolValue];
     }
-    /// 全局缺省背景色
     if (useGlobalBackgroundColor) {
         SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
         if (imageManager.magGlobalBackgroundColor) {
@@ -244,7 +250,8 @@ static const char MAGWebImageOriginalURLKey = '\0';
 
 - (BOOL)mag_isGIF
 {
-    return [self sd_isAnimated];
+    SDImageFormat format = [self sd_imageFormat];
+    return (format == SDImageFormatGIF);
 }
 
 - (BOOL)mag_isWebP
@@ -254,5 +261,65 @@ static const char MAGWebImageOriginalURLKey = '\0';
 }
 
 @end
+
+#if MAGSDFLPluginEnabled
+
+@implementation FLAnimatedImageView (MAGWebCache_FLAnimatedImageWrapper)
+
++ (void)load
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+        SEL originalSelector = @selector(setShouldAnimate:);
+#pragma clang diagnostic pop
+        SEL newSelector = @selector(mag_setShouldAnimate:);
+        Method originalMethod = class_getInstanceMethod(self, originalSelector);
+        Method newMethod = class_getInstanceMethod(self, newSelector);
+        if (!originalMethod || !newMethod) return;
+        
+        class_addMethod(self,
+                        originalSelector,
+                        class_getMethodImplementation(self, originalSelector),
+                        method_getTypeEncoding(originalMethod));
+        class_addMethod(self,
+                        newSelector,
+                        class_getMethodImplementation(self, newSelector),
+                        method_getTypeEncoding(newMethod));
+        
+        method_exchangeImplementations(class_getInstanceMethod(self, originalSelector),
+                                       class_getInstanceMethod(self, newSelector));
+    });
+}
+
+- (void)mag_setShouldAnimate:(BOOL)animated
+{
+    BOOL result = self.magAutoPlayAnimatedImage && animated;
+    [self mag_setShouldAnimate:result];
+}
+
+static const char MAGWebImageFLAutoPlayAnimatedImagKey = '\0';
+
+- (BOOL)magAutoPlayAnimatedImage
+{
+    BOOL result = YES;
+    NSNumber *autoPlayAnimatedImage = (NSNumber *)objc_getAssociatedObject(self, &MAGWebImageFLAutoPlayAnimatedImagKey);
+    if (autoPlayAnimatedImage) {
+        result = [autoPlayAnimatedImage boolValue];
+    } else {
+        [self setMagAutoPlayAnimatedImage:YES];
+    }
+    return result;
+}
+
+- (void)setMagAutoPlayAnimatedImage:(BOOL)magAutoPlayAnimatedImage
+{
+    objc_setAssociatedObject(self, &MAGWebImageFLAutoPlayAnimatedImagKey, @(magAutoPlayAnimatedImage), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+@end
+
+#endif
 
 #endif

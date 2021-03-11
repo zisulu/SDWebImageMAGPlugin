@@ -38,6 +38,8 @@
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     /// 全局背景色
     manager.magGlobalBackgroundColor = [UIColor blueColor];
+    /// 全局缺省图
+//    manager.magGlobalPlaceholderImage = [UIImage imageNamed:@""];
     /// 全局链接处理
     [manager setMagGlobalImageURLModifierBlock:^NSURL * _Nullable(__kindof UIView * _Nonnull magView, NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context) {
 //        NSString *url = originImageURL.ab

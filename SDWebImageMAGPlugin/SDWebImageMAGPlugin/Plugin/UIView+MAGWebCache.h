@@ -12,8 +12,14 @@
 #elif __has_include("SDWebImage.h")
 @import SDWebImage;
 #endif
+#if __has_include(<SDWebImageFLPlugin/SDWebImageFLPlugin.h>)
+#import <SDWebImageFLPlugin/SDWebImageFLPlugin.h>
+#elif __has_include("SDWebImageFLPlugin.h")
+@import SDWebImageFLPlugin;
+#endif
 
 #define MAGSDWebImageEnabled (__has_include(<SDWebImage/SDWebImage.h>) || __has_include("SDWebImage.h"))
+#define MAGSDFLPluginEnabled (__has_include(<SDWebImageFLPlugin/SDWebImageFLPlugin.h>) || __has_include("SDWebImageFLPlugin.h"))
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,21 +41,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 #if MAGSDWebImageEnabled
 
-/// BLOCK 传入一个 MAGWebImageURLModifierBlock
+/// BLOCK 传入一个 MAGWebImageURLModifierBlock，传入则无视 magGlobalImageURLModifierBlock
 /// 若传入则忽略 magGlobalImageURLModifierBlock 和 MAGWebImageContextUseGlobalImageURLModifierKey
 FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextImageURLModifierKey;
 
-/// BOOL 设为 NO 则忽略 magGlobalImageURLModifierBlock
+/// BOOL 当且仅当 MAGWebImageContextImageURLModifierKey 未设置时生效
+/// 设为 NO 则忽略 magGlobalImageURLModifierBlock
 /// 设为 YES 或者不传则启用 magGlobalImageURLModifierBlock
 FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextUseGlobalImageURLModifierKey;
 
-/// BOOL 设为 YES 或者不传则取 magGlobalBackgroundColor
-/// 若 magGlobalBackgroundColor 不存在则不处理，传入 NO 则不处理
+/// BOOL 不设置则默认为 YES，设为 YES 则取 magGlobalBackgroundColor
+/// 若 magGlobalBackgroundColor 不存在则不处理，传入 NO 或者不传 则不处理
 FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextUseGlobalBackgroundColorKey;
 
-/// BOOL 当未传入 placeholderImage 时，设为 YES 或者不传则取 magGlobalPlaceholderImage
+/// BOOL 不设置则默认为 YES，当且仅当 placeholderImage 为 nil 时生效
+/// 设为 YES 或者不传则取 magGlobalPlaceholderImage
 /// 若 magGlobalPlaceholderImage 不存在则不处理，设为 NO 则只取 placeholderImage
-/// 传入 placeholderImage 则 忽略此参数
 FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const MAGWebImageContextUseGlobalPlaceholderImageKey;
 
 typedef NSURL *_Nullable(^MAGWebImageURLModifierBlock)(__kindof UIView *magView, NSURL * _Nullable originImageURL, SDWebImageContext * _Nonnull context);
@@ -99,6 +106,20 @@ typedef NSURL *_Nullable(^MAGWebImageURLModifierBlock)(__kindof UIView *magView,
 @property (nonatomic, readonly) BOOL mag_isWebP;
 
 @end
+
+#if MAGSDFLPluginEnabled
+
+@interface FLAnimatedImageView (MAGWebCache_FLAnimatedImageWrapper)
+
+/// 默认为 YES，参考 SDAnimatedImageView 的 autoPlayAnimatedImage 实现
+/// 略有不同的是这里是交换 FL 内部的 setShouldAnimate: 实现的控制
+/// 为 FLAnimatedImageView 增加控制自动播放的属性
+/// 升级 FLAnimatedImageView 的时候需要注意是否出现冲突或变动
+@property (nonatomic, assign) BOOL magAutoPlayAnimatedImage;
+
+@end
+
+#endif
 
 #endif
 
